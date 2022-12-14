@@ -19,6 +19,7 @@ class AuthTwoFAController extends Controller
 
     public function store(AuthRequest $request)
     {
+        \Log::info('public function store(AuthRequest $request)');
         if ($this->verify($request)) {
             $authEnable = $this->user->update(
                 [
