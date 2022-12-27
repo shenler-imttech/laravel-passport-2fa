@@ -105,4 +105,31 @@ class AuthTwoFAController extends Controller
         }
         return response()->json('invalid code');
     }
+
+    /**
+     * @param AuthRequest $request
+     * @return bool|JsonResponse
+     */
+    public function verifyOTPDisableTwoFactorAuth(AuthRequest $request): bool|JsonResponse
+    {
+        $flag = false;
+
+        if ($this->authentication->verify(decrypt($this->user->google2fa_secret), $request->code)) {
+            $flag = true;
+        } elseif ($this->authentication->validRecoveryCode($request->get('code'), $this->user)) {
+            $flag = true;
+        }
+
+        if ($flag) {
+            $this->user->google2fa_enable = false;
+            $this->user->save();
+            return response()->json(
+                [
+                    'enabled' => $this->user->google2fa_enable,
+                ]
+            );
+        }
+
+        return response()->json('invalid code');
+    }
 }
