@@ -19,7 +19,6 @@ class AuthTwoFAController extends Controller
 
     public function store(AuthRequest $request)
     {
-        \Log::info('public function store(AuthRequest $request)');
         if ($this->verify($request)) {
             $authEnable = $this->user->update(
                 [
@@ -79,5 +78,11 @@ class AuthTwoFAController extends Controller
             return true;
         }
         return false;
+    }
+
+    public function getTwoFactorAuthEnabledStatus() {
+        $google2fa_enable_status = $this->user->google2fa_enable;
+
+        return $google2fa_enable_status;
     }
 }

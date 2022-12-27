@@ -30,4 +30,6 @@ Route::middleware('auth:api')->group(function () {
                 'index',
             ]
         );
+
+        Route::get('two-factor-enabled-status', [AuthTwoFAController::class, 'getTwoFactorAuthEnabledStatus']);
 });
