@@ -31,5 +31,6 @@ Route::middleware('auth:api')->group(function () {
             ]
         );
 
-        Route::get('two-factor-enabled-status', [AuthTwoFAController::class, 'getTwoFactorAuthEnabledStatus']);
+    Route::get('two-factor-enabled-status', [AuthTwoFAController::class, 'getTwoFactorAuthEnabledStatus']);
+    Route::post('verify-otp-enable-two-factor', [AuthTwoFAController::class, 'verifyOTPEnableTwoFactorAuth']);
 });
