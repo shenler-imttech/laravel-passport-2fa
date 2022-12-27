@@ -57,22 +57,37 @@ trait TwoFactorAuthentication
     public function enable2fa(): bool
     {
 
-        return $this->update(
-            [
-                'google2fa_secret' => encrypt(app(TwoFaAuthInterface::class)->generateSecretKey()),
-                "google2fa_recovery_codes" => encrypt(
-                    json_encode(
-                        Collection::times(6, function () {
-                            return
-                                [
-                                    "code" => Str::random(10) . '-' . Str::random(10),
-                                    "active" => true,
-                                ];
-                        })->all()
-                    )
-                ),
-            ]
-        );
+        // return $this->update(
+        //     [
+        //         'google2fa_secret' => encrypt(app(TwoFaAuthInterface::class)->generateSecretKey()),
+        //         "google2fa_recovery_codes" => encrypt(
+        //             json_encode(
+        //                 Collection::times(6, function () {
+        //                     return
+        //                         [
+        //                             "code" => Str::random(10) . '-' . Str::random(10),
+        //                             "active" => true,
+        //                         ];
+        //                 })->all()
+        //             )
+        //         ),
+        //     ]
+        // );
+
+        $this->google2fa_secret = encrypt(app(TwoFaAuthInterface::class)->generateSecretKey());
+        $this->google2fa_recovery_codes = encrypt(
+                                            json_encode(
+                                                Collection::times(6, function () {
+                                                    return
+                                                        [
+                                                            'code' => Str::random(10) . '-' . Str::random(10),
+                                                            'active' => true,
+                                                        ];
+                                                })->all()
+                                            )
+                                        );
+        
+        return $this->save();
     }
 
     /**
